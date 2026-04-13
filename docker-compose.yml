@@ -1,0 +1,82 @@
+services:
+  web-lb:
+    image: nginx:stable
+    container_name: web-lb
+    ports:
+      - "80:80"
+    volumes:
+      - ./web-lb.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web-1
+      - web-2
+
+  web-1:
+    build:
+      context: ./web
+      dockerfile: deploy/Dockerfile
+    container_name: web-1
+    environment:
+      SERVER_ENDPOINT: http://app-lb:8080
+      INSTANCE_NAME: web-1
+    depends_on:
+      - app-lb
+
+  web-2:
+    build:
+      context: ./web
+      dockerfile: deploy/Dockerfile
+    container_name: web-2
+    environment:
+      SERVER_ENDPOINT: http://app-lb:8080
+      INSTANCE_NAME: web-2
+    depends_on:
+      - app-lb
+
+  app-lb:
+    image: nginx:stable
+    container_name: app-lb
+    volumes:
+      - ./app-lb.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app-1
+      - app-2
+
+  app-1:
+    build:
+      context: ./app
+      dockerfile: deploy/Dockerfile
+    container_name: app-1
+    environment:
+      MYSQL_HOST: db
+      DB_USERNAME: admin
+      DB_PASSWORD: root1234
+      INSTANCE_NAME: app-1
+    depends_on:
+      - db
+
+  app-2:
+    build:
+      context: ./app
+      dockerfile: deploy/Dockerfile
+    container_name: app-2
+    environment:
+      MYSQL_HOST: db
+      DB_USERNAME: admin
+      DB_PASSWORD: root1234
+      INSTANCE_NAME: app-2
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: library
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root1234
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
