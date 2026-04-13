@@ -8,11 +8,11 @@ RUN ./gradlew build
 # run stage
 FROM eclipse-temurin:21-jre-jammy AS runner
 ENV PROFILE "dev"
-ENV MYSQL_HOST "localhost"
+ENV MYSQL_HOST "db"
 ENV DB_USERNAME "user"
 ENV DB_PASSWORD "password"
 ENV DB_NAME "library"
-ENV REDIS_HOST "localhost"
+ENV REDIS_HOST "redis"
 ENV REDIS_PORT "6379"
 
 EXPOSE 8080
