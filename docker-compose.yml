@@ -2,6 +2,7 @@ services:
   web-lb:
     image: nginx:stable
     container_name: web-lb
+    restart: always
     ports:
       - "80:80"
     volumes:
@@ -15,6 +16,7 @@ services:
       context: ./web
       dockerfile: deploy/Dockerfile
     container_name: web-1
+    restart: always
     environment:
       SERVER_ENDPOINT: http://app-lb:8080
       INSTANCE_NAME: web-1
@@ -26,6 +28,7 @@ services:
       context: ./web
       dockerfile: deploy/Dockerfile
     container_name: web-2
+    restart: always
     environment:
       SERVER_ENDPOINT: http://app-lb:8080
       INSTANCE_NAME: web-2
@@ -35,6 +38,7 @@ services:
   app-lb:
     image: nginx:stable
     container_name: app-lb
+    restart: always
     volumes:
       - ./app-lb.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -46,6 +50,7 @@ services:
       context: ./app
       dockerfile: deploy/Dockerfile
     container_name: app-1
+    restart: always
     environment:
       MYSQL_HOST: db
       DB_USERNAME: admin
@@ -59,6 +64,7 @@ services:
       context: ./app
       dockerfile: deploy/Dockerfile
     container_name: app-2
+    restart: always
     environment:
       MYSQL_HOST: db
       DB_USERNAME: admin
@@ -70,6 +76,7 @@ services:
   db:
     image: mysql:8.0
     container_name: db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root1234
       MYSQL_DATABASE: library
