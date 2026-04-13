@@ -4,6 +4,7 @@ WORKDIR /app
 COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew build
+RUN apt-get update && apt-get install -y curl
 
 # run stage
 FROM eclipse-temurin:21-jre-jammy AS runner
