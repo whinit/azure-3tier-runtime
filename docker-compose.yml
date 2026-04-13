@@ -22,7 +22,6 @@ services:
       INSTANCE_NAME: web-1
     depends_on:
       - app-lb
-
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
       interval: 30s
@@ -41,7 +40,6 @@ services:
       INSTANCE_NAME: web-2
     depends_on:
       - app-lb
-
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
       interval: 30s
@@ -72,13 +70,12 @@ services:
       INSTANCE_NAME: app-1
     depends_on:
       - db
-
     healthcheck:
-    test: ["CMD-SHELL", "echo > /dev/tcp/127.0.0.1/8080"]
-    interval: 30s
-    timeout: 10s
-    retries: 5
-    start_period: 60s
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   app-2:
     build:
@@ -93,13 +90,12 @@ services:
       INSTANCE_NAME: app-2
     depends_on:
       - db
-
     healthcheck:
-    test: ["CMD-SHELL", "echo > /dev/tcp/127.0.0.1/8080"]
-    interval: 30s
-    timeout: 10s
-    retries: 5
-    start_period: 60s
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   db:
     image: mysql:8.0
