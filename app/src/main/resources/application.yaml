@@ -112,3 +112,12 @@ springfox:
     swagger:
       v2:
         path: "/swagger/docs/v2"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  endpoint:
+    health:
+      show-details: always
